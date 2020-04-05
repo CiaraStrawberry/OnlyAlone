@@ -25,6 +25,9 @@ public class MainLevelManager : MonoBehaviour
     public bool hasWon = false;
 
 
+    /// <summary>
+    /// Done this way to make the editor cleaner, getComponent has a very low performance cost.
+    /// </summary>
     private void Awake()
     {
         instance = this;
@@ -35,34 +38,27 @@ public class MainLevelManager : MonoBehaviour
 
     void Start()
     {
-            allTextureLocations = texManager.getWorldSpaceLocationsOfTextures(texManager.getTexture().height,texManager.getTexture().width);
+        allTextureLocations = texManager.getWorldSpaceLocationsOfTextures(texManager.getTexture().height, texManager.getTexture().width);
         allPixelDistances = texManager.allPixelDistancesFromCenter(allTextureLocations);
         Texture2D tex2D = (Texture2D)texManager.getTexture();
-      
-     //   Debug.Log(tex2D.GetPixels().Length);
-     //    Debug.Log(allTextureLocations.Length);
     }
 
     void Update()
     {
-          
         RaycastHit2D[] hit2Ddata = raycastMan.sendRayInEveryDirection(centerObj.up, centerObj.position);
         float[] allHitDataDistances = raycastMan.getHitDataDistances(hit2Ddata);
-        bool[] arePixelVisible = texManager.arePixelsVisible(hit2Ddata,allHitDataDistances,allTextureLocations,allPixelDistances);
+        bool[] arePixelVisible = texManager.arePixelsVisible(hit2Ddata, allHitDataDistances, allTextureLocations, allPixelDistances);
         texManager.repaintTexture(arePixelVisible);
-      //  bool
-
-        //   for(int i =0;)
     }
 
-    public void nextLevel ()
+    public void nextLevel()
     {
         Debug.Log("load next level");
         SceneManager.LoadScene(nextLevelIndex);
     }
 
-    public void restartLevel ()
+    public void restartLevel()
     {
-       if(hasWon == false) SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        if (hasWon == false) SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

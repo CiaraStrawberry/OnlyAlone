@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/// <summary>
+/// This script checks the distance between itself and the player and sets its brightness and scale accordingly.
+/// </summary>
 public class getBrighterAsCloser : MonoBehaviour
 {
 
@@ -42,14 +46,9 @@ public class getBrighterAsCloser : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if(pulsing)
-        {
-    
-           
-        }
+      
 
         if (needsToPulse == true && hasPulsedYet == false) return;
         float distance = Vector3.Distance(player.position, transform.position);
@@ -104,31 +103,32 @@ public class getBrighterAsCloser : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         iTween.ValueTo(gameObject, iTween.Hash(
-"from", 1,
-"to", 0,
-"time", 1f,
-"onupdatetarget", gameObject,
-"onupdate", "callBackPulse",
-"easetype", iTween.EaseType.easeOutQuad
-)
-);
+        "from", 1,
+        "to", 0,
+        "time", 1f,
+        "onupdatetarget", gameObject,
+        "onupdate", "callBackPulse",
+        "easetype", iTween.EaseType.easeOutQuad)
+        );
     }
 
 
+    /// <summary>
+    ///  briefly reveal this lights location so the player can move towords it.
+    /// </summary>
     public void pulse()
     {
         Debug.Log("pulse");
         hasPulsedYet = true;
         spriteRend.enabled = true;
         iTween.ValueTo(gameObject, iTween.Hash(
-"from", 0,
-"to", 1,
-"time", 1f,
-"onupdatetarget", gameObject,
-"onupdate", "callBackPulse",
-"easetype", iTween.EaseType.easeOutQuad
-)
-);
+        "from", 0,
+        "to", 1,
+        "time", 1f,
+        "onupdatetarget", gameObject,
+        "onupdate", "callBackPulse",
+        "easetype", iTween.EaseType.easeOutQuad)
+        );
         StartCoroutine(waitToFinishPulse());
     }
 

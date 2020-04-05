@@ -15,12 +15,9 @@ public class PlayerCollisionDetection : MonoBehaviour
     [SerializeField]
     private MainLevelManager mainLevelMan;
 
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
+    /// <summary>
+    /// checks if the player has moved into a wall.
+    /// </summary>
     void Update()
     {
         if(collider.bounds.Contains(player.position))

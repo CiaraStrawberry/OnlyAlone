@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// All input must pass through here, also controls the world movement.
+/// </summary>
 public class PlayerInputManager : MonoBehaviour
 {
 

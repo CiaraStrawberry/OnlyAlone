@@ -2,19 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This class handles all the raycasting around the player
+/// </summary>
 public class PlayerRaycastingManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     public RaycastHit2D[] sendRayInEveryDirection(Vector3 up, Vector3 center)
     {
@@ -26,18 +18,7 @@ public class PlayerRaycastingManager : MonoBehaviour
             Vector3 spreadAngle = Quaternion.AngleAxis(1, Vector3.forward) * noAngle;
             noAngle = spreadAngle;
             Ray ray = new Ray(center, spreadAngle);
-          //  Debug.Log(spreadAngle);
             RaycastHit2D hit = Physics2D.Raycast(center, spreadAngle);
-            
-            if(hit.collider != null)
-            {
-             //   Debug.DrawLine(center,hit.point,Color.white);
-            }
-            else
-            {
-            //    Debug.DrawLine(center, spreadAngle * 200 + center,Color.white);
-            }
-
             data.Add(hit);
         }
         return data.ToArray();

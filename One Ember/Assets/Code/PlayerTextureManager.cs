@@ -24,7 +24,13 @@ public class PlayerTextureManager : MonoBehaviour
         
     }
 
-    public Vector2[] getWorldSpaceLocationsOfTextures (float height,float width)
+    /// <summary>
+    /// use the position of a pixel within a texture to get the world space so it can be determined if the light raycast hit it.
+    /// </summary>
+    /// <param name="height"></param>
+    /// <param name="width"></param>
+    /// <returns></returns>
+    public Vector2[] getWorldSpaceLocationsOfTextures(float height, float width)
     {
         Sprite currentTexture = mainTex.sprite;
 
@@ -32,19 +38,10 @@ public class PlayerTextureManager : MonoBehaviour
         Vector2 topLeft = getTopLeftOfTexture(mainTex);
         Vector2 bottomRight = getBottomRightOfTexture(mainTex);
 
-       // Debug.DrawLine(new Vector3(0, 0, 0), new Vector3(bottomLeft.x, bottomLeft.y, 0), Color.white, 10f);
-       // Debug.DrawLine(new Vector3(0, 0, 0), new Vector3(topLeft.x, topLeft.y, 0), Color.white, 10f);
-       // Debug.DrawLine(new Vector3(0, 0, 0), new Vector3(bottomRight.x, bottomRight.y, 0), Color.white, 10f);
-
         float distancePerPixelHeight = (topLeft.y - bottomLeft.y) / height;
-        float distancePerPixelWidth =(bottomRight.x - bottomLeft.x) / width;
-
-        // Debug.Log(bottomLeft.y);
-        //  Debug.Log(topLeft.y);
+        float distancePerPixelWidth = (bottomRight.x - bottomLeft.x) / width;
 
         Debug.Log(distancePerPixelHeight * height);
-        //return null;
-
         List<Vector2> output = new List<Vector2>();
         int counter = 0;
 
@@ -54,56 +51,52 @@ public class PlayerTextureManager : MonoBehaviour
             a += distancePerPixelHeight;
             for (float b = bottomLeft.x; b <= bottomRight.x;)
             {
-               
                 b += distancePerPixelWidth;
-counter++;
-                if (counter < 301)
-               {
-
-                    output.Add(new Vector2(b, a));
-               }
+                counter++;
+                if (counter < 301) output.Add(new Vector2(b, a));
                 //   if(counter % 650 == 0)  Debug.DrawLine(new Vector3(0,0,0),new Vector3(a,b,0),Color.white,10f);
                 // Debug.Log(counter);
-              
             }
         }
-       Debug.Log(counter);
+        Debug.Log(counter);
         return output.ToArray();
         /*
-              Vector2 bottomLeft = Camera.main.ViewportToWorldPoint(getBottomLeftOfTexture(mainTex));
-              Vector2 topLeft = Camera.main.ViewportToWorldPoint(getTopLeftOfTexture(mainTex));
-              Vector2 bottomRight = Camera.main.ViewportToWorldPoint(getBottomRightOfTexture(mainTex));
+        Vector2 bottomLeft = Camera.main.ViewportToWorldPoint(getBottomLeftOfTexture(mainTex));
+        Vector2 topLeft = Camera.main.ViewportToWorldPoint(getTopLeftOfTexture(mainTex));
+        Vector2 bottomRight = Camera.main.ViewportToWorldPoint(getBottomRightOfTexture(mainTex));
 
 
 
-              float heighInPixels = topLeft.y - bottomLeft.y;
-              float widthInPixels = bottomRight.x - bottomLeft.x;
-              float distancePerPixelHeight = heighInPixels / currentTexture.height;
-              float distancePerPixelWidth = widthInPixels / currentTexture.width;
-              Debug.DrawLine(new Vector3(0, 0, 0), new Vector3(bottomLeft.x,bottomLeft.y,0),Color.white,10f);
-              Debug.DrawLine(new Vector3(0, 0, 0), new Vector3(topLeft.x, topLeft.y, 0), Color.white, 10f);
-              Debug.DrawLine(new Vector3(0, 0, 0), new Vector3(bottomRight.x, bottomRight.y, 0), Color.white, 10f);
+        float heighInPixels = topLeft.y - bottomLeft.y;
+        float widthInPixels = bottomRight.x - bottomLeft.x;
+        float distancePerPixelHeight = heighInPixels / currentTexture.height;
+        float distancePerPixelWidth = widthInPixels / currentTexture.width;
+        Debug.DrawLine(new Vector3(0, 0, 0), new Vector3(bottomLeft.x, bottomLeft.y, 0), Color.white, 10f);
+        Debug.DrawLine(new Vector3(0, 0, 0), new Vector3(topLeft.x, topLeft.y, 0), Color.white, 10f);
+        Debug.DrawLine(new Vector3(0, 0, 0), new Vector3(bottomRight.x, bottomRight.y, 0), Color.white, 10f);
 
-              List<Vector2> output = new List<Vector2>();
-              for(float a = bottomLeft.y;a < topLeft.y;)
-              {
-                  a += distancePerPixelHeight;
-                  for (float b = bottomLeft.x; b < bottomRight.x;)
-                  {
-                      b += distancePerPixelWidth;
-                      output.Add(new Vector2(b, a));
-                   //   Debug.DrawLine(new Vector3(0,0,0),new Vector3(b,a,0),Color.white,10f);
-                  }
-              }
+        List<Vector2> output = new List<Vector2>();
+        for (float a = bottomLeft.y; a < topLeft.y;)
+        {
+            a += distancePerPixelHeight;
+            for (float b = bottomLeft.x; b < bottomRight.x;)
+            {
+                b += distancePerPixelWidth;
+                output.Add(new Vector2(b, a));
+                //   Debug.DrawLine(new Vector3(0,0,0),new Vector3(b,a,0),Color.white,10f);
+            }
+        }
 
-              return output.ToArray();
+        return output.ToArray();
 
-          */
+        */
 
 
     }
 
 
+    //keeping the memory location permanently asigned for GC reasons.
+    // This function gets the distance of every pixel from the center.
     private Vector3 _tempPos;
     public float[] allPixelDistancesFromCenter (Vector2[] input)
     {
@@ -179,20 +172,17 @@ counter++;
         return Quaternion.FromToRotation(up, from - to).eulerAngles.z;
     }
 
+    // reset each pixel in the texture to either on or off depending on it it has been found to be lit by the raycaster.
     public void repaintTexture (bool[] allPixelStatus)
     {
         Texture2D tex2D =  Instantiate((Texture2D)originalSpriteNewInstance.texture);
         Color[] pixels = tex2D.GetPixels();
-      //  Debug.Log(pixels.Length);
-     //   Debug.Log(allPixelStatus.Length);
-        for (int i = 0; i < pixels.Length;i++)
+        for (int i = 0; i < pixels.Length; i++)
         {
-            
-                if (allPixelStatus[i] == false)
-                {
-                    pixels[i] = Color.black;
-                }
-            
+            if (allPixelStatus[i] == false)
+            {
+                pixels[i] = Color.black;
+            }
         }
         tex2D.SetPixels(pixels);
         tex2D.Apply();

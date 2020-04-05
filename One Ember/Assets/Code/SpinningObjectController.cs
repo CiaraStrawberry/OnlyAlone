@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This class controls the objects moving in a circle in the 3d level.
+/// </summary>
 public class SpinningObjectController : MonoBehaviour
 {
 
@@ -18,13 +21,7 @@ public class SpinningObjectController : MonoBehaviour
 
     [SerializeField]
     private float offset;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
     void Update()
     {
        Vector3[] allPositions =  positionsInACircle(rotationThings.Length, center.position);
